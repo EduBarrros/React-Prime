@@ -7,3 +7,7 @@ export const getListMovies = (size, movies) => {
 
     return popularMovies
 }
+
+export const randomBanner = (movies) => {
+    return Math.floor(Math.random() * movies.length)
+}

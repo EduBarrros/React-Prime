@@ -9,10 +9,11 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 
 
-export const SliderItem = ({ data }) => {
+export const SliderItem = ({ data, navigatePage }) => {
     return (
         <Container
             activeOpacity={0.8}
+            onPress={() => navigatePage(data)}
         >
             <BannerItem
                 source={{ uri: `https://image.tmdb.org/t/p/original/${data.poster_path}` }}
