@@ -18,6 +18,7 @@ import { api, key } from '../../services/api'
 import Stars from 'react-native-stars';
 import { Genres } from '../../components/Genres'
 import { ModalLink } from '../../components/ModalLink'
+import { saveMovie, hasMovie, deleteMovie } from '../../utils/storage'
 
 
 export const Detail = () => {
@@ -27,6 +28,7 @@ export const Detail = () => {
 
     const [movie, setMovie] = useState({})
     const [openLink, setOpenLink] = useState(false)
+    const [favoriteMovie, setFavoriteMovie] = useState(false)
 
     useEffect(() => {
         let isActive = true;
@@ -35,7 +37,7 @@ export const Detail = () => {
             const response = await api.get(`/movie/${route.params?.id}`, {
                 params: {
                     api_key: key,
-                    language: 'pt-br'
+                    language: 'pt-BR'
                 }
             })
                 .catch((err) => {
@@ -44,6 +46,9 @@ export const Detail = () => {
 
             if (isActive) {
                 setMovie(response.data)
+
+                const isFavorite = await hasMovie(response.data)
+                setFavoriteMovie(isFavorite)
             }
         }
 
@@ -56,6 +61,20 @@ export const Detail = () => {
         }
 
     }, [])
+
+    const FavoriteMovie = async (movie) => {
+
+        if (favoriteMovie) {
+            await deleteMovie(movie.id)
+            setFavoriteMovie(false)
+            alert('Filme retirado dos favoritos')
+        } else {
+            await saveMovie('@primereact', movie)
+            setFavoriteMovie(true)
+            alert('Filme adicionado aos favoritos')
+        }
+
+    }
 
     return (
         <Container>
@@ -70,19 +89,31 @@ export const Detail = () => {
                         color='#fff'
                     />
                 </HeaderButtom>
-                <HeaderButtom>
-                    <Ionicons
-                        name='bookmark'
-                        size={28}
-                        color='#fff'
-                    />
+                <HeaderButtom
+                    onPress={() => FavoriteMovie(movie)}
+                >
+                    {
+                        favoriteMovie
+                            ?
+                            <Ionicons
+                                name='bookmark'
+                                size={28}
+                                color='#fff'
+                            />
+                            :
+                            <Ionicons
+                                name='bookmark-outline'
+                                size={28}
+                                color='#fff'
+                            />
+                    }
                 </HeaderButtom>
             </Header>
             <Banner
                 resizeMethod='resize'
                 source={{ uri: `https://image.tmdb.org/t/p/original/${movie.poster_path}` }}
             />
-            <ButtonLink 
+            <ButtonLink
                 onPress={() => setOpenLink(true)}
             >
                 <Feather
@@ -111,12 +142,12 @@ export const Detail = () => {
                     {movie.vote_average}/10
                 </Rate>
             </ContentArea>
-            <ListGenres 
+            <ListGenres
                 data={movie?.genres}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => String(item.id)}
-                renderItem={({item}) => <Genres data={item}/>}
+                renderItem={({ item }) => <Genres data={item} />}
             />
             <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -133,7 +164,7 @@ export const Detail = () => {
                 transparent={true}
                 visible={openLink}
             >
-                <ModalLink 
+                <ModalLink
                     link={movie.homepage}
                     title={movie.title}
                     closeModal={() => setOpenLink(false)}

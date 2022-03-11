@@ -29,6 +29,7 @@ export const Home = () => {
     const [topMovies, setTopMovies] = useState([])
     const [loading, setLoading] = useState(true)
     const [bannerMovie, setBannerMovie] = useState({})
+    const [input, setInput] = useState('')
 
     useEffect(() => {
         let isActive = true
@@ -41,7 +42,7 @@ export const Home = () => {
                 api.get('/movie/now_playing', {
                     params: {
                         api_key: key,
-                        language: 'pt-br',
+                        language: 'pt-BR',
                         page: 1,
                     }
                 }
@@ -49,7 +50,7 @@ export const Home = () => {
                 api.get('/movie/popular', {
                     params: {
                         api_key: key,
-                        language: 'pt-br',
+                        language: 'pt-BR',
                         page: 1,
                     }
                 }
@@ -57,7 +58,7 @@ export const Home = () => {
                 api.get('/movie/top_rated', {
                     params: {
                         api_key: key,
-                        language: 'pt-br',
+                        language: 'pt-BR',
                         page: 1,
                     }
                 }
@@ -91,6 +92,16 @@ export const Home = () => {
         navigation.navigate('Detail', { id: item.id})
     }
 
+    const handleSearchMovie = () => {
+
+        if(input === ''){
+            return
+        }
+
+        navigation.navigate('Search', {name: input})
+        setInput('')
+    }
+
     if (loading) {
         return (
             <Container>
@@ -106,8 +117,12 @@ export const Home = () => {
                 <Input
                     placeholder='Ex Vingadores'
                     placeholderTextColor='#ddd'
+                    value={input}
+                    onChangeText={(text) => setInput(text)}
                 />
-                <SearchButton>
+                <SearchButton
+                    onPress={() => handleSearchMovie()}
+                >
                     <Feather name='search' size={30} color='#fff' />
                 </SearchButton>
             </SearchContainer>
