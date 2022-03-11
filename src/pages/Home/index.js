@@ -11,7 +11,8 @@ import {
     Title,
     Banner,
     BannerButton,
-    SliderMovie
+    SliderMovie,
+    LoadingContainer
 } from './styles'
 import { Header } from '../../components/Header'
 import { Feather } from '@expo/vector-icons'
@@ -104,9 +105,9 @@ export const Home = () => {
 
     if (loading) {
         return (
-            <Container>
+            <LoadingContainer>
                 <ActivityIndicator size='large' color='#fff' />
-            </Container>
+            </LoadingContainer>
         )
     }
 

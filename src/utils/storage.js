@@ -14,7 +14,6 @@ export const saveMovie = async (key, newMovie) => {
     const hasMovie = moviesStored.some(item => item.id === newMovie.id)
 
     if(hasMovie){
-        console.log('Esse filme já existe na lista')
         return
     }
 

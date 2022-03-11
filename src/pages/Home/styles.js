@@ -6,6 +6,14 @@ export const Container = styled.SafeAreaView`
     padding: 4px 0;
 `;
 
+export const LoadingContainer = styled.SafeAreaView`
+    background-color: #141A29;
+    flex: 1;
+    padding: 4px 0;
+    align-items: center;
+    justify-content: center;
+`;
+
 export const SearchContainer = styled.View`
     flex-direction: row;
     width: 100%;
@@ -40,7 +48,7 @@ export const Title = styled.Text`
     color: #fff;
     padding-left: 14px;
     padding-right: 14px;
-`;  
+`;
 
 export const BannerButton = styled.TouchableOpacity`
 
